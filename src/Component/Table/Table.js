@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,11 +14,43 @@ import useBill from '../hooks/useBill';
 
 
 export default function DenseTable() {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
+    const [open, setOpen] = useState(false);
+    const [openToEdit, setOpenToEdit] = useState(false)
+    const handleOpen = () => {
+        setOpen(true);
+        setOpenToEdit(false)
+    }
     const handleClose = () => setOpen(false);
-    const { bills } = useBill();
-    console.log(bills)
+    const { bills, setBills } = useBill();
+
+    // deleting a billing info
+    const handleDeleteBill = (id) => {
+        const proceed = window.confirm('Are You Sure! Want to delete? ')
+        if (proceed) {
+            const url = `http://localhost:5000/delete-billing/${id}`;
+            fetch(url, {
+                method: "DELETE",
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.deletedCount) {
+                        alert("Deleted Successfully!")
+                        const remainingBillings = bills.filter(bill => bill._id !== id)
+                        console.log(remainingBillings)
+                        setBills(remainingBillings)
+                    } else {
+                        alert('someting wrong')
+                    }
+                })
+        }
+    }
+
+    // editing or updating bill
+    const handleEditBill = (id) => {
+        setOpenToEdit(true)
+        setOpen(true)
+    }
+
     return (
         <>
             <Container>
@@ -55,7 +87,14 @@ export default function DenseTable() {
                                     <TableCell align="right">{bill.phone}</TableCell>
                                     <TableCell align="right">{bill.email}</TableCell>
                                     <TableCell align="right">{bill.paidAmount}</TableCell>
-                                    <TableCell align="right">Action Btn here</TableCell>
+                                    <TableCell align="right">
+                                        <button
+                                            onClick={() => { handleEditBill(bill._id) }}
+                                            className='btn'>Edit</button>
+                                        <button onClick={() => {
+                                            handleDeleteBill(bill._id)
+                                        }} className='btn'>delete</button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -67,6 +106,7 @@ export default function DenseTable() {
             {/* modal componet  */}
             <CustomModal
                 open={open}
+                openToEdit={openToEdit}
                 handleOpen={handleOpen}
                 handleClose={handleClose}
             />

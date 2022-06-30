@@ -13,3 +13,11 @@
 .table-row {
     height: 60px;
 }
+
+.btn {
+    padding: 5px;
+    background-color: whitesmoke;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
