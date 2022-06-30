@@ -7,55 +7,69 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import './styles.css'
+import Button from '@mui/material/Button';
+import CustomModal from '../Modal/CustomModal';
+import { Container, Input } from '@mui/material';
+import useBill from '../hooks/useBill';
 
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 export default function DenseTable() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const { bills } = useBill();
+    console.log(bills)
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Dessert (100g serving)</TableCell>
-                        <TableCell align="right">Calories</TableCell>
-                        <TableCell align="right">Fat&nbsp(g)</TableCell>
-                        <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                        <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="right">{row.calories}</TableCell>
-                            <TableCell align="right">{row.fat}</TableCell>
-                            <TableCell align="right">{row.carbs}</TableCell>
-                            <TableCell align="right">{row.protein}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <Container>
+                <div className='search'>
+                    <Input
+                        placeholder='Search bill'
+                        className='search-input'
+                    />
+                    <Button onClick={handleOpen}>Add New Bill</Button>
+                </div>
+
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Billing ID</TableCell>
+                                <TableCell align="right">Full Name</TableCell>
+                                <TableCell align="right">Mobile Number</TableCell>
+                                <TableCell align="right">Email Address</TableCell>
+                                <TableCell align="right">Paid Amount</TableCell>
+                                <TableCell align="right">Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {bills?.map((bill) => (
+                                <TableRow
+                                    key={bill._id}
+                                    className="table-row"
+                                >
+                                    <TableCell component="th" scope="row">
+                                        {bill._id}
+                                    </TableCell>
+                                    <TableCell align="right">{bill.fullName}</TableCell>
+                                    <TableCell align="right">{bill.phone}</TableCell>
+                                    <TableCell align="right">{bill.email}</TableCell>
+                                    <TableCell align="right">{bill.paidAmount}</TableCell>
+                                    <TableCell align="right">Action Btn here</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Container>
+
+
+            {/* modal componet  */}
+            <CustomModal
+                open={open}
+                handleOpen={handleOpen}
+                handleClose={handleClose}
+            />
+        </>
     );
 }
