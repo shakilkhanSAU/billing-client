@@ -15,7 +15,10 @@ import useBill from '../hooks/useBill';
 
 export default function DenseTable() {
     const [open, setOpen] = useState(false);
-    const [openToEdit, setOpenToEdit] = useState(false)
+    const [openToEdit, setOpenToEdit] = useState(false);
+    const [billingId, setBillingId] = useState('')
+
+
     const handleOpen = () => {
         setOpen(true);
         setOpenToEdit(false)
@@ -49,6 +52,7 @@ export default function DenseTable() {
     const handleEditBill = (id) => {
         setOpenToEdit(true)
         setOpen(true)
+        setBillingId(id)
     }
 
     return (
@@ -81,7 +85,16 @@ export default function DenseTable() {
                                     className="table-row"
                                 >
                                     <TableCell component="th" scope="row">
-                                        {bill._id}
+                                        {
+                                            bill._id ?
+                                                <>
+                                                    {bill._id}
+                                                </>
+                                                :
+                                                <>
+                                                    Generating ID
+                                                </>
+                                        }
                                     </TableCell>
                                     <TableCell align="right">{bill.fullName}</TableCell>
                                     <TableCell align="right">{bill.phone}</TableCell>
@@ -109,6 +122,7 @@ export default function DenseTable() {
                 openToEdit={openToEdit}
                 handleOpen={handleOpen}
                 handleClose={handleClose}
+                billingId={billingId}
             />
         </>
     );

@@ -9,7 +9,7 @@ const useBill = () => {
             .then(data => {
                 setBills(data)
             })
-    }, [setBills]);
+    }, [bills]);
     return {
         bills,
         setBills

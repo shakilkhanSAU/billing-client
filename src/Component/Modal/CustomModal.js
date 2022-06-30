@@ -6,6 +6,8 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import useBills from '../hooks/useBill'
+
 
 const style = {
     position: 'absolute',
@@ -22,8 +24,13 @@ const style = {
 
 
 
-const CustomModal = ({ open, handleClose, openToEdit }) => {
+const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
     const [billingInfo, setBillingInfo] = useState({})
+    const { bills, setBills } = useBills();
+    const [billInfo, setBillInfo] = useState()
+    const targetBill = bills?.find(bill => bill._id === billingId)
+    // console.log(bills)
+
     const handleOnBlur = (e) => {
         const field = e.target.name;
         const value = e.target.value;
@@ -39,6 +46,8 @@ const CustomModal = ({ open, handleClose, openToEdit }) => {
         const billingDoc = {
             ...billingInfo,
         }
+
+        setBills([...bills, billingDoc])
 
         // send data to server
         if (!billingDoc.fullName) {
@@ -64,7 +73,6 @@ const CustomModal = ({ open, handleClose, openToEdit }) => {
                 .then(data => {
                     if (data.insertedId) {
                         handleClose()
-                        alert('Successfully added new Product')
                         e.target.reset();
                     } else {
                         alert('something wrong')
@@ -72,6 +80,11 @@ const CustomModal = ({ open, handleClose, openToEdit }) => {
                     }
                 })
         }
+    }
+
+    // update the billing info
+    const handleUpdatingBill = () => {
+        alert(`be patient. bill no. ${billingId}`)
     }
 
     return (
@@ -89,13 +102,23 @@ const CustomModal = ({ open, handleClose, openToEdit }) => {
             <Fade in={open}>
                 <Box sx={style}>
                     <Typography id="transition-modal-title" variant="h6" component="h2">
-                        {/* Add a New Bill */}
+                        {
+                            openToEdit ?
+                                <>
+                                    You can Edit Your Billing Info
+                                </>
+                                :
+                                <>
+                                    Add a New Bill
+                                </>
+                        }
                     </Typography>
                     <form onSubmit={handleBillSubmit}>
                         <TextField
                             id="outlined-basic"
                             label="Your Name"
                             variant="outlined"
+                            defaultValue={billInfo?.fullName}
                             name="fullName"
                             onBlur={handleOnBlur}
                             sx={{ width: '100%', mb: 1, mt: 1 }}
@@ -128,11 +151,17 @@ const CustomModal = ({ open, handleClose, openToEdit }) => {
                         />
                         {
                             openToEdit ?
-                                <Button variant="contained" type="submit">Edit</Button>
+                                <></>
                                 :
                                 <Button variant="contained" type="submit">Book Now</Button>
                         }
                     </form>
+                    {
+                        openToEdit ?
+                            <Button onClick={handleUpdatingBill} variant="contained" type="submit">Edit</Button>
+                            :
+                            <></>
+                    }
                 </Box>
             </Fade>
         </Modal>
