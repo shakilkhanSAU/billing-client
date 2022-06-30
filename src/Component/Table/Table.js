@@ -17,11 +17,13 @@ export default function DenseTable() {
     const [open, setOpen] = useState(false);
     const [openToEdit, setOpenToEdit] = useState(false);
     const [billingId, setBillingId] = useState('')
+    const [targetBill, setTargetBill] = useState()
 
 
     const handleOpen = () => {
-        setOpen(true);
+        setTargetBill({})
         setOpenToEdit(false)
+        setOpen(true);
     }
     const handleClose = () => setOpen(false);
     const { bills, setBills } = useBill();
@@ -53,6 +55,8 @@ export default function DenseTable() {
         setOpenToEdit(true)
         setOpen(true)
         setBillingId(id)
+        const targetBill = bills?.find(bill => bill._id === id)
+        setTargetBill(targetBill)
     }
 
     return (
@@ -123,6 +127,7 @@ export default function DenseTable() {
                 handleOpen={handleOpen}
                 handleClose={handleClose}
                 billingId={billingId}
+                targetBill={targetBill}
             />
         </>
     );

@@ -24,12 +24,10 @@ const style = {
 
 
 
-const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
+const CustomModal = ({ open, handleClose, openToEdit, targetBill }) => {
     const [billingInfo, setBillingInfo] = useState({})
     const { bills, setBills } = useBills();
-    const [billInfo, setBillInfo] = useState()
-    const targetBill = bills?.find(bill => bill._id === billingId)
-    // console.log(bills)
+
 
     const handleOnBlur = (e) => {
         const field = e.target.name;
@@ -84,7 +82,30 @@ const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
 
     // update the billing info
     const handleUpdatingBill = () => {
-        alert(`be patient. bill no. ${billingId}`)
+        // updating billing info
+        const url = `http://localhost:5000/update-billing/${targetBill._id}`;
+        const updateDoc = {
+            ...billingInfo
+        }
+
+        fetch(url, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(updateDoc)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount) {
+                    alert('Bill Data Update Successfull!')
+                    const updatedBills = [...bills]
+                    setBills(updatedBills)
+                    handleClose()
+                } else {
+                    alert('Something Wrong!')
+                }
+            })
     }
 
     return (
@@ -118,7 +139,7 @@ const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
                             id="outlined-basic"
                             label="Your Name"
                             variant="outlined"
-                            defaultValue={billInfo?.fullName}
+                            defaultValue={targetBill?.fullName}
                             name="fullName"
                             onBlur={handleOnBlur}
                             sx={{ width: '100%', mb: 1, mt: 1 }}
@@ -127,6 +148,7 @@ const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
                             id="outlined-basic"
                             label="Your Email"
                             variant="outlined"
+                            defaultValue={targetBill?.email}
                             name="email"
                             onBlur={handleOnBlur}
                             sx={{ width: '100%', mb: 1, mt: 1 }}
@@ -135,6 +157,7 @@ const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
                             id="outlined-basic"
                             label="Your Phone Number"
                             variant="outlined"
+                            defaultValue={targetBill?.phone}
                             name="phone"
                             maxLength={9}
                             onBlur={handleOnBlur}
@@ -144,6 +167,7 @@ const CustomModal = ({ open, handleClose, openToEdit, billingId }) => {
                             id="outlined-basic"
                             label="Paid Amount"
                             variant="outlined"
+                            defaultValue={targetBill?.paidAmount}
                             name="paidAmount"
                             type="number"
                             onBlur={handleOnBlur}
