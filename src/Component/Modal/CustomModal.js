@@ -62,7 +62,7 @@ const CustomModal = ({ open, handleClose, openToEdit, targetBill }) => {
             alert('phone number must be in 11 digit')
             return
         } else {
-            fetch('http://localhost:5000/add-billing', {
+            fetch('https://bloc-doright-21614.herokuapp.com/add-billing', {
                 method: 'POST',
                 headers: {
                     "content-type": "application/json"
@@ -85,7 +85,7 @@ const CustomModal = ({ open, handleClose, openToEdit, targetBill }) => {
     // update the billing info
     const handleUpdatingBill = () => {
         // updating billing info
-        const url = `http://localhost:5000/update-billing/${targetBill._id}`;
+        const url = `https://bloc-doright-21614.herokuapp.com/update-billing/${targetBill._id}`;
         const updateDoc = {
             ...billingInfo
         }

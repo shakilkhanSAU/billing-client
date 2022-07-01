@@ -32,7 +32,7 @@ export default function CustomTable() {
     const handleDeleteBill = (id) => {
         const proceed = window.confirm('Are You Sure! Want to delete? ')
         if (proceed) {
-            const url = `http://localhost:5000/delete-billing/${id}`;
+            const url = `https://bloc-doright-21614.herokuapp.com/delete-billing/${id}`;
             fetch(url, {
                 method: "DELETE",
             })

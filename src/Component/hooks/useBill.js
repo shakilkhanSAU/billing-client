@@ -6,7 +6,7 @@ const useBill = () => {
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(pageinitial);
     const size = 10
-    const url = `http://localhost:5000/billing-list?page=${page}&&size=${size}`
+    const url = `https://bloc-doright-21614.herokuapp.com/billing-list?page=${page}&&size=${size}`
     useEffect(() => {
         fetch(url)
             .then(res => res.json())

@@ -1,6 +1,6 @@
 import { Input } from '@mui/material';
 import React from 'react';
-import './login'
+import './login.css'
 
 const Signup = () => {
     return (
