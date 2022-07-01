@@ -17,4 +17,4 @@ user can search any data by the search field (there was some issue----not fixed 
 Pagination is usefull tools that help user to make proper view to dataset. 
 
 ## last data in First Row
-data set is sorted by descending order using `sort` funciton in backend so that last entry willbe in first column
+data set is sorted by descending order using `sort()` funciton in backend so that last entry willbe in first column
