@@ -1,18 +1,28 @@
 import { useEffect, useState } from 'react';
 
 const useBill = () => {
-    const [bills, setBills] = useState()
-    const url = "http://localhost:5000/billing-list"
+    let pageinitial = 0;
+    const [bills, setBills] = useState();
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(pageinitial);
+    const size = 10
+    const url = `http://localhost:5000/billing-list?page=${page}&&size=${size}`
     useEffect(() => {
         fetch(url)
             .then(res => res.json())
             .then(data => {
-                setBills(data)
+                setBills(data.billing)
+                const count = data.count
+                const pageNumber = Math.ceil(count / size)
+                setPageCount(pageNumber)
             })
-    }, [bills]);
+    }, [url, bills]);
     return {
         bills,
-        setBills
+        setBills,
+        pageCount,
+        setPage,
+        page
     }
 }
 export default useBill;

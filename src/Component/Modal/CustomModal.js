@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import useBills from '../hooks/useBill'
 
 
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -28,7 +29,6 @@ const CustomModal = ({ open, handleClose, openToEdit, targetBill }) => {
     const [billingInfo, setBillingInfo] = useState({})
     const { bills, setBills } = useBills();
 
-
     const handleOnBlur = (e) => {
         const field = e.target.name;
         const value = e.target.value;
@@ -45,7 +45,8 @@ const CustomModal = ({ open, handleClose, openToEdit, targetBill }) => {
             ...billingInfo,
         }
 
-        setBills([...bills, billingDoc])
+        const updatedinfo = [...bills, billingDoc]
+        setBills(updatedinfo)
 
         // send data to server
         if (!billingDoc.fullName) {
@@ -70,6 +71,7 @@ const CustomModal = ({ open, handleClose, openToEdit, targetBill }) => {
             }).then(res => res.json())
                 .then(data => {
                     if (data.insertedId) {
+                        alert('New bill Successfully Added!')
                         handleClose()
                         e.target.reset();
                     } else {

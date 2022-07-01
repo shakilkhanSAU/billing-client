@@ -1,13 +1,14 @@
 import React from 'react';
 import Header from '../Header/Header';
-import Table from '../Table/Table'
+import CustomTable from '../Table/CustomTable';
+
 
 const Home = () => {
     return (
-        <div>
+        <>
             <Header />
-            <Table></Table>
-        </div>
+            <CustomTable />
+        </>
     );
 };
 
